@@ -197,6 +197,26 @@ st.markdown(
         border-radius: 999px;
         font-weight: 800;
     }
+    div[data-testid="stButton"] {
+        display: flex;
+        justify-content: center;
+    }
+    div[data-testid="stButton"] > button[kind="primary"] {
+        width: 78%;
+        min-height: 52px;
+        background: linear-gradient(135deg, #ff7eb6 0%, #ff4f9a 48%, #e83f87 100%) !important;
+        color: white !important;
+        border: none !important;
+        box-shadow: 0 12px 28px rgba(232, 63, 135, 0.32);
+        font-size: 16px;
+        letter-spacing: 0.2px;
+    }
+    div[data-testid="stButton"] > button[kind="primary"]:hover {
+        background: linear-gradient(135deg, #ff8ec0 0%, #ff5fa4 48%, #ef4b92 100%) !important;
+        color: white !important;
+        border: none !important;
+        transform: translateY(-1px);
+    }
     </style>
     """,
     unsafe_allow_html=True,
