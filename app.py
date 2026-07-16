@@ -18,6 +18,7 @@ st.markdown(
     <style>
     .stApp {
         background: linear-gradient(180deg, #fff7f1 0%, #f7efe8 45%, #efe7dd 100%);
+        color: #2b211c;
     }
     .block-container {
         max-width: 430px;
@@ -29,11 +30,25 @@ st.markdown(
     }
     .phone-shell {
         background: #fffaf6;
+        color: #2b211c;
         border: 1px solid rgba(40, 24, 12, 0.10);
         box-shadow: 0 22px 55px rgba(80, 48, 24, 0.18);
         border-radius: 34px;
         padding: 18px 16px 22px 16px;
         margin-bottom: 18px;
+    }
+    .phone-shell p,
+    .phone-shell span,
+    .phone-shell div,
+    .phone-shell label {
+        color: inherit;
+    }
+    [data-testid="stMarkdownContainer"],
+    [data-testid="stText"],
+    [data-testid="stWidgetLabel"],
+    [data-testid="stMetricLabel"],
+    [data-testid="stMetricValue"] {
+        color: #2b211c !important;
     }
     .status-bar {
         display: flex;
@@ -50,6 +65,9 @@ st.markdown(
         border-radius: 26px;
         padding: 20px;
         margin-bottom: 16px;
+    }
+    .hero, .hero h1, .hero p {
+        color: white !important;
     }
     .hero h1 {
         font-size: 28px;
@@ -69,11 +87,15 @@ st.markdown(
     }
     .soft-card {
         background: white;
+        color: #2b211c !important;
         border: 1px solid rgba(50, 30, 15, 0.08);
         border-radius: 22px;
         padding: 15px;
         margin: 10px 0;
         box-shadow: 0 8px 22px rgba(80, 48, 24, 0.07);
+    }
+    .soft-card, .soft-card b, .soft-card span, .soft-card div {
+        color: #2b211c !important;
     }
     .pill {
         display: inline-block;
@@ -106,6 +128,14 @@ st.markdown(
         padding: 18px;
         margin: 13px 0;
     }
+    .decision-success,
+    .decision-warning,
+    .decision-error,
+    .decision-success div,
+    .decision-warning div,
+    .decision-error div {
+        color: white !important;
+    }
     .decision-title {
         font-size: 21px;
         font-weight: 900;
@@ -131,6 +161,9 @@ st.markdown(
         font-size: 12px;
         font-weight: 700;
     }
+    .bottom-nav, .bottom-nav span {
+        color: white !important;
+    }
     .stTabs [data-baseweb="tab-list"] {
         gap: 6px;
         background: #efe1d6;
@@ -141,6 +174,23 @@ st.markdown(
         border-radius: 999px;
         padding: 8px 10px;
         font-size: 13px;
+        color: #2b211c !important;
+    }
+    .stTabs [aria-selected="true"] {
+        background: #fffaf6 !important;
+        color: #2b211c !important;
+    }
+    div[data-baseweb="select"] > div,
+    div[data-baseweb="select"] span,
+    div[data-baseweb="popover"] {
+        color: #2b211c !important;
+    }
+    input,
+    textarea,
+    .stTextInput input,
+    .stNumberInput input {
+        color: #2b211c !important;
+        background: #fffaf6 !important;
     }
     .stButton > button, .stLinkButton > a {
         width: 100%;
