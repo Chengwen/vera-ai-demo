@@ -236,7 +236,7 @@ PRODUCTS: Dict[str, Dict] = {
         "price": 699,
         "occasions": ["presentation", "office", "dinner"],
         "material": "polyester blend",
-        "image": "https://source.unsplash.com/900x1100/?beige,blazer,woman,fashion",
+        "image": "assets/beige_blazer.jpg",
     },
     "黑色防水风衣 | Black waterproof trench coat": {
         "category": "coat",
@@ -246,7 +246,7 @@ PRODUCTS: Dict[str, Dict] = {
         "price": 899,
         "occasions": ["office", "travel", "rainy commute"],
         "material": "water-resistant cotton blend",
-        "image": "https://source.unsplash.com/900x1100/?black,trench,coat,woman,fashion",
+        "image": "assets/black_trench_coat.jpg",
     },
     "粉色缎面连衣裙 | Pink satin mini dress": {
         "category": "dress",
@@ -256,7 +256,7 @@ PRODUCTS: Dict[str, Dict] = {
         "price": 599,
         "occasions": ["party", "dinner"],
         "material": "satin",
-        "image": "https://source.unsplash.com/900x1100/?pink,satin,dress,woman,fashion",
+        "image": "assets/pink_satin_dress.jpg",
     },
     "白色经典衬衫 | White classic shirt": {
         "category": "shirt",
@@ -266,7 +266,7 @@ PRODUCTS: Dict[str, Dict] = {
         "price": 299,
         "occasions": ["office", "presentation", "interview"],
         "material": "cotton",
-        "image": "https://source.unsplash.com/900x1100/?white,shirt,woman,fashion",
+        "image": "assets/white_classic_shirt.jpg",
     },
 }
 
