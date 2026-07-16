@@ -698,9 +698,11 @@ with tab_buy:
             key="preferred_colors",
         )
 
-        if st.button(tr("Ask Vera · 开始买前分析", "Ask Vera · Start Analysis"), type="primary"):
-            st.session_state.buy_step = "analysis"
-            st.rerun()
+        left_spacer, center_cta, right_spacer = st.columns([0.12, 0.76, 0.12])
+        with center_cta:
+            if st.button(tr("开始买前分析", "Ask Vera"), type="primary", use_container_width=True):
+                st.session_state.buy_step = "analysis"
+                st.rerun()
 
     else:
         selected_product_key = st.session_state.get("selected_product_key", list(PRODUCTS.keys())[0])
