@@ -25,9 +25,7 @@ st.markdown(
         padding-top: 1.1rem;
         padding-bottom: 2rem;
     }
-    div[data-testid="stSidebar"] {
-        display: none;
-    }
+    div[data-testid="stSidebar"] { display: none; }
     .phone-shell {
         background: #fffaf6;
         color: #2b211c;
@@ -36,12 +34,6 @@ st.markdown(
         border-radius: 34px;
         padding: 18px 16px 22px 16px;
         margin-bottom: 18px;
-    }
-    .phone-shell p,
-    .phone-shell span,
-    .phone-shell div,
-    .phone-shell label {
-        color: inherit;
     }
     [data-testid="stMarkdownContainer"],
     [data-testid="stText"],
@@ -66,9 +58,7 @@ st.markdown(
         padding: 20px;
         margin-bottom: 16px;
     }
-    .hero, .hero h1, .hero p {
-        color: white !important;
-    }
+    .hero, .hero h1, .hero p { color: white !important; }
     .hero h1 {
         font-size: 28px;
         line-height: 1.05;
@@ -102,7 +92,7 @@ st.markdown(
         padding: 6px 10px;
         border-radius: 999px;
         background: #f2e2d7;
-        color: #62442f;
+        color: #62442f !important;
         font-size: 12px;
         font-weight: 700;
         margin: 3px 4px 3px 0;
@@ -128,12 +118,8 @@ st.markdown(
         padding: 18px;
         margin: 13px 0;
     }
-    .decision-success,
-    .decision-warning,
-    .decision-error,
-    .decision-success div,
-    .decision-warning div,
-    .decision-error div {
+    .decision-success, .decision-warning, .decision-error,
+    .decision-success div, .decision-warning div, .decision-error div {
         color: white !important;
     }
     .decision-title {
@@ -153,7 +139,7 @@ st.markdown(
     .bottom-nav {
         display: flex;
         justify-content: space-around;
-        background: #2b211c;
+        background: linear-gradient(135deg, #ff7eb6 0%, #ff4f9a 48%, #e83f87 100%);
         border-radius: 22px;
         color: white;
         padding: 11px 7px;
@@ -161,34 +147,34 @@ st.markdown(
         font-size: 12px;
         font-weight: 700;
     }
-    .bottom-nav, .bottom-nav span {
-        color: white !important;
-    }
+    .bottom-nav, .bottom-nav span { color: white !important; }
     .stTabs [data-baseweb="tab-list"] {
         gap: 6px;
-        background: #efe1d6;
+        background: #ffe1ee;
         padding: 5px;
         border-radius: 999px;
+        border: 1px solid rgba(232, 63, 135, 0.16);
     }
     .stTabs [data-baseweb="tab"] {
         border-radius: 999px;
         padding: 8px 10px;
         font-size: 13px;
-        color: #2b211c !important;
+        color: #b12f6f !important;
+        font-weight: 800;
     }
     .stTabs [aria-selected="true"] {
-        background: #fffaf6 !important;
-        color: #2b211c !important;
+        background: linear-gradient(135deg, #ff7eb6 0%, #ff4f9a 48%, #e83f87 100%) !important;
+        color: white !important;
+        box-shadow: 0 8px 18px rgba(232, 63, 135, 0.22);
     }
+    .stTabs [aria-selected="true"] p,
+    .stTabs [aria-selected="true"] span { color: white !important; }
     div[data-baseweb="select"] > div,
     div[data-baseweb="select"] span,
     div[data-baseweb="popover"] {
         color: #2b211c !important;
     }
-    input,
-    textarea,
-    .stTextInput input,
-    .stNumberInput input {
+    input, textarea, .stTextInput input, .stNumberInput input {
         color: #2b211c !important;
         background: #fffaf6 !important;
     }
@@ -217,6 +203,19 @@ st.markdown(
         border: none !important;
         transform: translateY(-1px);
     }
+    div[data-testid="stButton"] > button[kind="secondary"],
+    .stLinkButton > a {
+        background: linear-gradient(135deg, #ff7eb6 0%, #ff4f9a 48%, #e83f87 100%) !important;
+        color: white !important;
+        border: none !important;
+        box-shadow: 0 10px 24px rgba(232, 63, 135, 0.24);
+    }
+    div[data-testid="stButton"] > button[kind="secondary"]:hover,
+    .stLinkButton > a:hover {
+        background: linear-gradient(135deg, #ff8ec0 0%, #ff5fa4 48%, #ef4b92 100%) !important;
+        color: white !important;
+        border: none !important;
+    }
     </style>
     """,
     unsafe_allow_html=True,
@@ -225,7 +224,8 @@ st.markdown(
 
 @dataclass
 class ClothingItem:
-    name: str
+    name_cn: str
+    name_en: str
     category: str
     color: str
     style: str
@@ -235,20 +235,30 @@ class ClothingItem:
     last_worn_days: int
 
 
+def tr(cn: str, en: str) -> str:
+    return cn if st.session_state.get("lang") == "zh" else en
+
+
+def item_name(item: ClothingItem) -> str:
+    return item.name_cn if st.session_state.get("lang") == "zh" else item.name_en
+
+
 WARDROBE: List[ClothingItem] = [
-    ClothingItem("米色短款西装外套 | Beige cropped blazer", "blazer", "beige", "business casual", "cropped", ["presentation", "office"], 1, 78),
-    ClothingItem("黑色修身西装外套 | Black tailored blazer", "blazer", "black", "formal", "straight", ["interview", "presentation", "office"], 7, 9),
-    ClothingItem("白色宽松衬衫 | White oversized shirt", "shirt", "white", "minimal", "oversized", ["office", "casual", "presentation"], 12, 3),
-    ClothingItem("浅蓝牛仔外套 | Light blue denim jacket", "jacket", "blue", "casual", "boxy", ["casual", "travel"], 0, 122),
-    ClothingItem("黑色阔腿西裤 | Black wide-leg trousers", "trousers", "black", "minimal", "wide-leg", ["office", "presentation", "dinner"], 10, 5),
-    ClothingItem("奶油色针织开衫 | Cream knit cardigan", "cardigan", "cream", "soft casual", "relaxed", ["casual", "study"], 2, 46),
-    ClothingItem("直筒蓝色牛仔裤 | Straight blue jeans", "jeans", "blue", "casual", "straight", ["casual", "travel", "dinner"], 8, 12),
-    ClothingItem("黑色乐福鞋 | Black loafers", "shoes", "black", "business casual", "flat", ["office", "presentation", "dinner"], 15, 2),
+    ClothingItem("米色短款西装外套", "Beige cropped blazer", "blazer", "beige", "business casual", "cropped", ["presentation", "office"], 1, 78),
+    ClothingItem("黑色修身西装外套", "Black tailored blazer", "blazer", "black", "formal", "straight", ["interview", "presentation", "office"], 7, 9),
+    ClothingItem("白色宽松衬衫", "White oversized shirt", "shirt", "white", "minimal", "oversized", ["office", "casual", "presentation"], 12, 3),
+    ClothingItem("浅蓝牛仔外套", "Light blue denim jacket", "jacket", "blue", "casual", "boxy", ["casual", "travel"], 0, 122),
+    ClothingItem("黑色阔腿西裤", "Black wide-leg trousers", "trousers", "black", "minimal", "wide-leg", ["office", "presentation", "dinner"], 10, 5),
+    ClothingItem("奶油色针织开衫", "Cream knit cardigan", "cardigan", "cream", "soft casual", "relaxed", ["casual", "study"], 2, 46),
+    ClothingItem("直筒蓝色牛仔裤", "Straight blue jeans", "jeans", "blue", "casual", "straight", ["casual", "travel", "dinner"], 8, 12),
+    ClothingItem("黑色乐福鞋", "Black loafers", "shoes", "black", "business casual", "flat", ["office", "presentation", "dinner"], 15, 2),
 ]
 
 
 PRODUCTS: Dict[str, Dict] = {
-    "米色西装外套 | Beige tailored blazer": {
+    "beige_blazer": {
+        "name_cn": "米色西装外套",
+        "name_en": "Beige tailored blazer",
         "category": "blazer",
         "color": "beige",
         "style": "business casual",
@@ -258,7 +268,9 @@ PRODUCTS: Dict[str, Dict] = {
         "material": "polyester blend",
         "image": "assets/beige_blazer.jpg",
     },
-    "黑色防水风衣 | Black waterproof trench coat": {
+    "black_trench": {
+        "name_cn": "黑色防水风衣",
+        "name_en": "Black waterproof trench coat",
         "category": "coat",
         "color": "black",
         "style": "commuter",
@@ -268,7 +280,9 @@ PRODUCTS: Dict[str, Dict] = {
         "material": "water-resistant cotton blend",
         "image": "assets/black_trench_coat.jpg",
     },
-    "粉色缎面连衣裙 | Pink satin mini dress": {
+    "pink_dress": {
+        "name_cn": "粉色缎面连衣裙",
+        "name_en": "Pink satin mini dress",
         "category": "dress",
         "color": "pink",
         "style": "party",
@@ -278,7 +292,9 @@ PRODUCTS: Dict[str, Dict] = {
         "material": "satin",
         "image": "assets/pink_satin_dress.jpg",
     },
-    "白色经典衬衫 | White classic shirt": {
+    "white_shirt": {
+        "name_cn": "白色经典衬衫",
+        "name_en": "White classic shirt",
         "category": "shirt",
         "color": "white",
         "style": "minimal",
@@ -300,12 +316,22 @@ SCENE_GAPS = {
 }
 
 SCENE_LABELS = {
-    "presentation": "课堂汇报 / Presentation",
-    "office": "上班通勤 / Office",
-    "rainy commute": "雨天通勤 / Rainy commute",
-    "dinner": "晚餐约会 / Dinner",
-    "travel": "旅行出行 / Travel",
+    "presentation": ("课堂汇报", "Presentation"),
+    "office": ("上班通勤", "Office"),
+    "rainy commute": ("雨天通勤", "Rainy commute"),
+    "dinner": ("晚餐约会", "Dinner"),
+    "travel": ("旅行出行", "Travel"),
 }
+
+
+def scene_label(scene: str) -> str:
+    cn, en = SCENE_LABELS[scene]
+    return tr(cn, en)
+
+
+def product_label(product_key: str) -> str:
+    product = PRODUCTS[product_key]
+    return f"{tr(product['name_cn'], product['name_en'])} · HK${product['price']}"
 
 
 def similarity_score(product: Dict, item: ClothingItem) -> int:
@@ -321,9 +347,9 @@ def similarity_score(product: Dict, item: ClothingItem) -> int:
     return min(score, 100)
 
 
-def duplication_analysis(product: Dict) -> Tuple[int, List[Tuple[str, int]]]:
+def duplication_analysis(product: Dict) -> Tuple[int, List[Tuple[ClothingItem, int]]]:
     matches = sorted(
-        [(item.name, similarity_score(product, item)) for item in WARDROBE],
+        [(item, similarity_score(product, item)) for item in WARDROBE],
         key=lambda x: x[1],
         reverse=True,
     )
@@ -364,39 +390,39 @@ def occasion_gap_score(product: Dict, target_occasion: str) -> Tuple[int, str]:
     owned_categories = {item.category for item in WARDROBE if target_occasion in item.occasions}
     product_relevant = product["category"] in required or target_occasion in product["occasions"]
     if product["category"] in required and product["category"] not in owned_categories:
-        return 88, "补足明确场合缺口 | Fills a clear occasion gap"
+        return 88, tr("补足明确场合缺口", "Fills a clear occasion gap")
     if product_relevant and product["category"] in owned_categories:
-        return 52, "可用于该场合，但不是明显缺口 | Useful, but not a clear gap"
+        return 52, tr("可用于该场合，但不是明显缺口", "Useful, but not a clear gap")
     if product_relevant:
-        return 66, "有场景相关性，仍需搭配验证 | Relevant, but needs outfit validation"
-    return 28, "与当前场景关联较弱 | Weak relevance to this occasion"
+        return 66, tr("有场景相关性，仍需搭配验证", "Relevant, but needs outfit validation")
+    return 28, tr("与当前场景关联较弱", "Weak relevance to this occasion")
 
 
 def final_decision(duplication: int, dust: int, fit: int, gap: int) -> Tuple[str, str, int]:
     buy_score = int(gap * 0.35 + fit * 0.3 + (100 - duplication) * 0.2 + (100 - dust) * 0.15)
     if buy_score >= 68 and gap >= 60:
-        return "建议买 · 补缺口 | Buy · Fills a gap", "success", buy_score
+        return tr("建议买 · 补缺口", "Buy · Fills a gap"), "success", buy_score
     if buy_score >= 48:
-        return "谨慎 · 先收藏 | Cautious · Wishlist first", "warning", buy_score
-    return "不建议买 · 重复/吃灰风险高 | Don't buy · High risk", "error", buy_score
+        return tr("谨慎 · 先收藏", "Cautious · Wishlist first"), "warning", buy_score
+    return tr("不建议买 · 重复/吃灰风险高", "Don't buy · High risk"), "error", buy_score
 
 
-def outfit_suggestions(product: Dict, target_occasion: str) -> List[Dict]:
+def outfit_suggestions(product: Dict, target_occasion: str) -> List[Tuple[str, str, str]]:
     color = product["color"].title()
     category = product["category"]
     if category == "blazer":
         return [
-            ("Look 1 · 汇报专业感", f"{color} blazer + White shirt + Black trousers + Black loafers", "Presentation / interview"),
-            ("Look 2 · 轻商务休闲", f"{color} blazer + Blue jeans + Black loafers", "Casual Friday / dinner"),
+            (tr("Look 1 · 汇报专业感", "Look 1 · Presentation Ready"), f"{color} blazer + White shirt + Black trousers + Black loafers", tr("课堂汇报 / 实习面试", "Presentation / interview")),
+            (tr("Look 2 · 轻商务休闲", "Look 2 · Smart Casual"), f"{color} blazer + Blue jeans + Black loafers", tr("轻商务周五 / 晚餐", "Casual Friday / dinner")),
         ]
     if category == "coat":
         return [
-            ("Look 1 · 雨天通勤", f"{color} trench coat + White shirt + Black trousers", "Rainy commute"),
-            ("Look 2 · 旅行叠穿", f"{color} trench coat + Cream cardigan + Blue jeans", "Weekend travel"),
+            (tr("Look 1 · 雨天通勤", "Look 1 · Rainy Commute"), f"{color} trench coat + White shirt + Black trousers", tr("雨天上班或上课", "Rainy office or campus commute")),
+            (tr("Look 2 · 旅行叠穿", "Look 2 · Travel Layering"), f"{color} trench coat + Cream cardigan + Blue jeans", tr("周末旅行", "Weekend travel")),
         ]
     return [
-        ("Look 1 · 衣橱混搭", f"{color} {category} + Black blazer + Black loafers", SCENE_LABELS[target_occasion]),
-        ("Look 2 · 休闲替代", f"{color} {category} + Blue jeans + Cream cardigan", "Weekend casual"),
+        (tr("Look 1 · 衣橱混搭", "Look 1 · Existing Wardrobe Mix"), f"{color} {category} + Black blazer + Black loafers", scene_label(target_occasion)),
+        (tr("Look 2 · 休闲替代", "Look 2 · Casual Alternative"), f"{color} {category} + Blue jeans + Cream cardigan", tr("周末休闲", "Weekend casual")),
     ]
 
 
@@ -414,45 +440,88 @@ def metric_card(label: str, value: int, note: str):
     st.progress(value / 100)
 
 
+def language_gate():
+    if "lang" in st.session_state:
+        return
+
+    st.markdown('<div class="phone-shell">', unsafe_allow_html=True)
+    st.markdown(
+        """
+        <div class="status-bar">
+            <span>9:41</span><span>Vera AI</span><span>●●●</span>
+        </div>
+        <div class="hero">
+            <h1>Vera AI</h1>
+            <p>Choose your language / 选择界面语言</p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.markdown('<div class="section-title">Language / 语言</div>', unsafe_allow_html=True)
+    if st.button("中文", type="primary"):
+        st.session_state.lang = "zh"
+        st.session_state.buy_step = "scan"
+        st.rerun()
+    if st.button("English", type="secondary"):
+        st.session_state.lang = "en"
+        st.session_state.buy_step = "scan"
+        st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+    st.stop()
+
+
+language_gate()
+
 st.markdown('<div class="phone-shell">', unsafe_allow_html=True)
 st.markdown(
-    """
+    f"""
     <div class="status-bar">
         <span>9:41</span><span>Vera AI</span><span>●●●</span>
     </div>
     <div class="hero">
-        <h1>Ask Vera<br/>Before You Buy</h1>
-        <p>买前先问 Vera：重复不重复？会不会吃灰？是不是补缺口？</p>
+        <h1>{tr("买前先问 Vera", "Ask Vera<br/>Before You Buy")}</h1>
+        <p>{tr("重复不重复？会不会吃灰？是不是补缺口？", "Is it duplicate? Will it be rarely worn? Does it fill a wardrobe gap?")}</p>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-tab_buy, tab_closet, tab_agent = st.tabs(["🛍️ Buy", "👗 Closet", "🤖 Agent"])
+lang_switch = st.button(tr("Switch to English", "切换到中文"), type="secondary")
+if lang_switch:
+    st.session_state.lang = "en" if st.session_state.lang == "zh" else "zh"
+    st.session_state.buy_step = "scan"
+    st.rerun()
+
+tab_buy, tab_closet, tab_agent = st.tabs([
+    tr("🛍️ 购买", "🛍️ Buy"),
+    tr("👗 衣橱", "👗 Closet"),
+    tr("🤖 Agent", "🤖 Agent"),
+])
 
 with tab_buy:
     if "buy_step" not in st.session_state:
         st.session_state.buy_step = "scan"
 
     if st.session_state.buy_step == "scan":
-        st.markdown('<div class="section-title">新衣扫描 | New Item Scan</div>', unsafe_allow_html=True)
-        selected_product_name = st.selectbox(
-            "选择商品 | Select item",
+        st.markdown(f'<div class="section-title">{tr("新衣扫描", "New Item Scan")}</div>', unsafe_allow_html=True)
+        selected_product_key = st.selectbox(
+            tr("选择商品", "Select item"),
             list(PRODUCTS.keys()),
-            key="selected_product_name",
+            format_func=product_label,
+            key="selected_product_key",
             label_visibility="collapsed",
         )
-        product = PRODUCTS[selected_product_name]
+        product = PRODUCTS[selected_product_key]
         uploaded_file = st.file_uploader(
-            "上传商品图 | Upload product image",
+            tr("上传商品图", "Upload product image"),
             type=["png", "jpg", "jpeg"],
             key="uploaded_product_image",
             label_visibility="collapsed",
         )
         if uploaded_file:
-            st.image(uploaded_file, caption="上传商品图 | Uploaded product image", use_container_width=True)
+            st.image(uploaded_file, caption=tr("上传商品图", "Uploaded product image"), use_container_width=True)
         else:
-            st.image(product["image"], caption=selected_product_name, use_container_width=True)
+            st.image(product["image"], caption=product_label(selected_product_key), use_container_width=True)
 
         st.markdown(
             f"""
@@ -462,58 +531,58 @@ with tab_buy:
                 <span class="pill">{product['style']}</span>
                 <span class="pill">HK${product['price']}</span>
                 <div style="margin-top:8px;color:#6f5b4d;font-size:13px;">
-                    材质 | Material: {product['material']}<br/>
-                    识别方式 | Recognition: mock multimodal product intake
+                    {tr("材质", "Material")}: {product['material']}<br/>
+                    {tr("识别方式：模拟多模态商品识别", "Recognition: mock multimodal product intake")}
                 </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        st.markdown('<div class="section-title">购买目标 | Buying Context</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="section-title">{tr("购买目标", "Buying Context")}</div>', unsafe_allow_html=True)
         st.selectbox(
-            "场景 | Occasion",
+            tr("场景", "Occasion"),
             list(SCENE_LABELS.keys()),
-            format_func=lambda x: SCENE_LABELS[x],
+            format_func=scene_label,
             index=0,
             key="target_occasion",
         )
-        st.slider("预算 | Budget HK$", 200, 1500, 800, 50, key="budget")
+        st.slider(tr("预算 HK$", "Budget HK$"), 200, 1500, 800, 50, key="budget")
         st.multiselect(
-            "偏好风格 | Preferred styles",
+            tr("偏好风格", "Preferred styles"),
             ["minimal", "business casual", "formal", "casual", "commuter", "party", "soft casual"],
             default=["minimal", "business casual"],
             key="preferred_styles",
         )
         st.multiselect(
-            "偏好颜色 | Preferred colors",
+            tr("偏好颜色", "Preferred colors"),
             ["black", "white", "beige", "blue", "cream", "pink"],
             default=["black", "white", "beige"],
             key="preferred_colors",
         )
 
-        if st.button("Ask Vera · 开始买前分析", type="primary"):
+        if st.button(tr("Ask Vera · 开始买前分析", "Ask Vera · Start Analysis"), type="primary"):
             st.session_state.buy_step = "analysis"
             st.rerun()
 
     else:
-        selected_product_name = st.session_state.get("selected_product_name", list(PRODUCTS.keys())[0])
-        product = PRODUCTS[selected_product_name]
+        selected_product_key = st.session_state.get("selected_product_key", list(PRODUCTS.keys())[0])
+        product = PRODUCTS[selected_product_key]
         target_occasion = st.session_state.get("target_occasion", "presentation")
         budget = st.session_state.get("budget", 800)
         preferred_styles = st.session_state.get("preferred_styles", ["minimal", "business casual"])
         preferred_colors = st.session_state.get("preferred_colors", ["black", "white", "beige"])
         uploaded_file = st.session_state.get("uploaded_product_image")
 
-        st.markdown('<div class="section-title">Vera 分析 | Vera Analysis</div>', unsafe_allow_html=True)
-        if st.button("← 重新选择商品 | Back to scan"):
+        st.markdown(f'<div class="section-title">{tr("Vera 分析", "Vera Analysis")}</div>', unsafe_allow_html=True)
+        if st.button(tr("← 重新选择商品", "← Back to scan")):
             st.session_state.buy_step = "scan"
             st.rerun()
 
         if uploaded_file:
-            st.image(uploaded_file, caption="本次分析商品 | Product being analyzed", use_container_width=True)
+            st.image(uploaded_file, caption=tr("本次分析商品", "Product being analyzed"), use_container_width=True)
         else:
-            st.image(product["image"], caption=selected_product_name, use_container_width=True)
+            st.image(product["image"], caption=product_label(selected_product_key), use_container_width=True)
 
         duplication, similar_items = duplication_analysis(product)
         dust = dust_risk(product)
@@ -524,10 +593,10 @@ with tab_buy:
         st.markdown(
             f"""
             <div class="soft-card">
-                <b>分析对象 | Item</b><br/>
-                {selected_product_name}<br/>
-                <span class="pill">{SCENE_LABELS[target_occasion]}</span>
-                <span class="pill">Budget HK${budget}</span>
+                <b>{tr("分析对象", "Item")}</b><br/>
+                {product_label(selected_product_key)}<br/>
+                <span class="pill">{scene_label(target_occasion)}</span>
+                <span class="pill">HK${budget}</span>
             </div>
             """,
             unsafe_allow_html=True,
@@ -535,11 +604,11 @@ with tab_buy:
 
         col1, col2 = st.columns(2)
         with col1:
-            metric_card("重复度 | Duplication", duplication, "越高越像已有衣物")
-            metric_card("适配 | Fit Match", fit, "偏好、预算、场景")
+            metric_card(tr("重复度", "Duplication"), duplication, tr("越高越像已有衣物", "Higher means more similar to owned items"))
+            metric_card(tr("适配", "Fit Match"), fit, tr("偏好、预算、场景", "Preference, budget, occasion"))
         with col2:
-            metric_card("吃灰风险 | Dust Risk", dust, "越高越可能低频使用")
-            metric_card("缺口 | Gap Match", gap, gap_reason)
+            metric_card(tr("吃灰风险", "Dust Risk"), dust, tr("越高越可能低频使用", "Higher means more likely to be rarely worn"))
+            metric_card(tr("缺口", "Gap Match"), gap, gap_reason)
 
         st.markdown(
             f"""
@@ -551,33 +620,34 @@ with tab_buy:
             unsafe_allow_html=True,
         )
 
+        if st.session_state.lang == "zh":
+            why = f"这件 {product['color']} {product['category']} 会与 Amy 的衣橱记忆进行对比。当前场景是 {scene_label(target_occasion)}。Vera 判断：{gap_reason}。"
+        else:
+            why = f"This {product['color']} {product['category']} is compared with Amy's wardrobe memory. The target occasion is {scene_label(target_occasion)}. Vera's judgment: {gap_reason}."
+
         st.markdown(
             f"""
             <div class="soft-card">
-                <b>为什么 | Why</b><br/>
-                这件 <b>{product['color']} {product['category']}</b> 会与衣橱中部分单品对比。
-                当前场景是 <b>{SCENE_LABELS[target_occasion]}</b>。Vera 判断：<b>{gap_reason}</b>。
-                <br/><br/>
-                Vera compares this item with Amy's wardrobe memory, predicts low-use risk,
-                checks style fit, and decides whether it truly fills a wardrobe gap.
+                <b>{tr("为什么", "Why")}</b><br/>
+                {why}
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-        st.markdown("##### 最相似已有衣物 | Similar owned items")
-        for item_name, score in similar_items:
+        st.markdown(f"##### {tr('最相似已有衣物', 'Similar owned items')}")
+        for item, score in similar_items:
             st.markdown(
                 f"""
                 <div class="soft-card">
-                    <b>{item_name}</b><br/>
-                    相似度 | Similarity: {score}/100
+                    <b>{item_name(item)}</b><br/>
+                    {tr("相似度", "Similarity")}: {score}/100
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
 
-        st.markdown("##### 即时搭配 | Instant looks")
+        st.markdown(f"##### {tr('即时搭配', 'Instant looks')}")
         for name, items, scene in outfit_suggestions(product, target_occasion):
             st.markdown(
                 f"""
@@ -591,45 +661,46 @@ with tab_buy:
             )
 
         if decision_type == "success":
-            st.link_button("去合作商店购买 | Go to partner store", "https://example-fashion-store.com/product/vera-demo")
+            st.link_button(tr("去合作商店购买", "Go to partner store"), "https://example-fashion-store.com/product/vera-demo")
         else:
-            st.button("加入 Wishlist，7 天后提醒 | Wishlist & remind me", type="secondary")
+            st.button(tr("加入 Wishlist，7 天后提醒", "Wishlist & remind me"), type="secondary")
 
 with tab_closet:
-    st.markdown('<div class="section-title">Amy 的数字衣橱 | Amy’s Digital Closet</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-title">{tr("Amy 的数字衣橱", "Amy’s Digital Closet")}</div>', unsafe_allow_html=True)
     total_wears = sum(item.wears_90d for item in WARDROBE)
     low_use = sum(1 for item in WARDROBE if item.wears_90d <= 1)
     categories = len({item.category for item in WARDROBE})
     c1, c2, c3 = st.columns(3)
-    c1.metric("90天穿着", total_wears)
-    c2.metric("吃灰单品", low_use)
-    c3.metric("品类", categories)
+    c1.metric(tr("90天穿着", "90d wears"), total_wears)
+    c2.metric(tr("吃灰单品", "Low-use items"), low_use)
+    c3.metric(tr("品类", "Categories"), categories)
 
-    wardrobe_df = pd.DataFrame([item.__dict__ for item in WARDROBE])
-    wardrobe_df["occasions"] = wardrobe_df["occasions"].apply(", ".join)
-    wardrobe_df = wardrobe_df.rename(
-        columns={
-            "name": "Item",
-            "category": "Category",
-            "color": "Color",
-            "style": "Style",
-            "silhouette": "Shape",
-            "occasions": "Occasions",
-            "wears_90d": "90d Wears",
-            "last_worn_days": "Last Worn Days",
-        }
+    wardrobe_df = pd.DataFrame(
+        [
+            {
+                tr("衣物", "Item"): item_name(item),
+                tr("品类", "Category"): item.category,
+                tr("颜色", "Color"): item.color,
+                tr("风格", "Style"): item.style,
+                tr("版型", "Shape"): item.silhouette,
+                tr("场景", "Occasions"): ", ".join(item.occasions),
+                tr("90天穿着次数", "90d Wears"): item.wears_90d,
+                tr("距上次穿着天数", "Last Worn Days"): item.last_worn_days,
+            }
+            for item in WARDROBE
+        ]
     )
     st.dataframe(wardrobe_df, hide_index=True, use_container_width=True)
 
 with tab_agent:
-    st.markdown('<div class="section-title">Agent 工作流 | Agent Workflow</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-title">{tr("Agent 工作流", "Agent Workflow")}</div>', unsafe_allow_html=True)
     steps = [
-        ("1", "Product Intake Agent", "识别商品图片、价格、颜色、版型"),
-        ("2", "Wardrobe Memory Agent", "读取 Amy 的衣橱与穿着历史"),
-        ("3", "Duplication Agent", "判断是否又买了一件相似款"),
-        ("4", "Dust Risk Agent", "预测是否会吃灰、低频使用"),
-        ("5", "Occasion Gap Agent", "判断是否补足真实场景缺口"),
-        ("6", "Decision Agent", "输出买 / 谨慎 / 不买，并解释原因"),
+        ("1", "Product Intake Agent", tr("识别商品图片、价格、颜色、版型", "Recognizes product image, price, color, and silhouette")),
+        ("2", "Wardrobe Memory Agent", tr("读取 Amy 的衣橱与穿着历史", "Reads Amy's wardrobe and wear history")),
+        ("3", "Duplication Agent", tr("判断是否又买了一件相似款", "Checks whether the item duplicates existing clothes")),
+        ("4", "Dust Risk Agent", tr("预测是否会吃灰、低频使用", "Predicts whether the item will be rarely worn")),
+        ("5", "Occasion Gap Agent", tr("判断是否补足真实场景缺口", "Checks whether it fills a real occasion gap")),
+        ("6", "Decision Agent", tr("输出买 / 谨慎 / 不买，并解释原因", "Outputs Buy / Cautious / Don't buy with reasons")),
     ]
     for num, title, desc in steps:
         st.markdown(
@@ -643,20 +714,33 @@ with tab_agent:
             unsafe_allow_html=True,
         )
 
-    st.markdown("##### Responsible AI Guardrails | 负责任 AI")
-    st.markdown(
-        """
-        - 不使用羞辱性身体评价，只提供 comfort 与 fit preference 建议。
-        - CPS/佣金推荐必须披露，避免利益冲突。
-        - 默认 sustainable-first：先用已有衣物，只有补缺口才建议买。
-        - 用户可删除衣橱照片、购买历史与偏好数据。
-        """
-    )
+    st.markdown(f"##### {tr('负责任 AI', 'Responsible AI Guardrails')}")
+    if st.session_state.lang == "zh":
+        st.markdown(
+            """
+            - 不使用羞辱性身体评价，只提供 comfort 与 fit preference 建议。
+            - CPS/佣金推荐必须披露，避免利益冲突。
+            - 默认 sustainable-first：先用已有衣物，只有补缺口才建议买。
+            - 用户可删除衣橱照片、购买历史与偏好数据。
+            """
+        )
+    else:
+        st.markdown(
+            """
+            - No body-shaming language; only comfort and fit-preference guidance.
+            - CPS/affiliate incentives must be disclosed.
+            - Sustainable-first by default: use existing clothes before recommending new purchases.
+            - Users can delete wardrobe photos, purchase history, and preference data.
+            """
+        )
 
 st.markdown(
-    """
+    f"""
     <div class="bottom-nav">
-        <span>🏠 Home</span><span>🛍️ Buy</span><span>👗 Closet</span><span>👤 Amy</span>
+        <span>🏠 {tr("首页", "Home")}</span>
+        <span>🛍️ {tr("购买", "Buy")}</span>
+        <span>👗 {tr("衣橱", "Closet")}</span>
+        <span>👤 Amy</span>
     </div>
     """,
     unsafe_allow_html=True,
