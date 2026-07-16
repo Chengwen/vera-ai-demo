@@ -411,122 +411,169 @@ st.markdown(
 tab_buy, tab_closet, tab_agent = st.tabs(["🛍️ Buy", "👗 Closet", "🤖 Agent"])
 
 with tab_buy:
-    st.markdown('<div class="section-title">新衣扫描 | New Item Scan</div>', unsafe_allow_html=True)
-    selected_product_name = st.selectbox("选择商品 | Select item", list(PRODUCTS.keys()), label_visibility="collapsed")
-    product = PRODUCTS[selected_product_name]
-    uploaded_file = st.file_uploader(
-        "上传商品图 | Upload product image",
-        type=["png", "jpg", "jpeg"],
-        label_visibility="collapsed",
-    )
-    if uploaded_file:
-        st.image(uploaded_file, caption="上传商品图 | Uploaded product image", use_container_width=True)
-    else:
-        st.image(product["image"], caption=selected_product_name, use_container_width=True)
+    if "buy_step" not in st.session_state:
+        st.session_state.buy_step = "scan"
 
-    st.markdown(
-        f"""
-        <div class="soft-card">
-            <span class="pill">{product['category']}</span>
-            <span class="pill">{product['color']}</span>
-            <span class="pill">{product['style']}</span>
-            <span class="pill">HK${product['price']}</span>
-            <div style="margin-top:8px;color:#6f5b4d;font-size:13px;">
-                材质 | Material: {product['material']}<br/>
-                识别方式 | Recognition: mock multimodal product intake
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    if st.session_state.buy_step == "scan":
+        st.markdown('<div class="section-title">新衣扫描 | New Item Scan</div>', unsafe_allow_html=True)
+        selected_product_name = st.selectbox(
+            "选择商品 | Select item",
+            list(PRODUCTS.keys()),
+            key="selected_product_name",
+            label_visibility="collapsed",
+        )
+        product = PRODUCTS[selected_product_name]
+        uploaded_file = st.file_uploader(
+            "上传商品图 | Upload product image",
+            type=["png", "jpg", "jpeg"],
+            key="uploaded_product_image",
+            label_visibility="collapsed",
+        )
+        if uploaded_file:
+            st.image(uploaded_file, caption="上传商品图 | Uploaded product image", use_container_width=True)
+        else:
+            st.image(product["image"], caption=selected_product_name, use_container_width=True)
 
-    st.markdown('<div class="section-title">购买目标 | Buying Context</div>', unsafe_allow_html=True)
-    target_occasion = st.selectbox(
-        "场景 | Occasion",
-        list(SCENE_LABELS.keys()),
-        format_func=lambda x: SCENE_LABELS[x],
-        index=0,
-    )
-    budget = st.slider("预算 | Budget HK$", 200, 1500, 800, 50)
-    preferred_styles = st.multiselect(
-        "偏好风格 | Preferred styles",
-        ["minimal", "business casual", "formal", "casual", "commuter", "party", "soft casual"],
-        default=["minimal", "business casual"],
-    )
-    preferred_colors = st.multiselect(
-        "偏好颜色 | Preferred colors",
-        ["black", "white", "beige", "blue", "cream", "pink"],
-        default=["black", "white", "beige"],
-    )
-
-    duplication, similar_items = duplication_analysis(product)
-    dust = dust_risk(product)
-    fit = fit_style_score(product, preferred_styles, preferred_colors, budget)
-    gap, gap_reason = occasion_gap_score(product, target_occasion)
-    decision, decision_type, buy_score = final_decision(duplication, dust, fit, gap)
-
-    st.markdown('<div class="section-title">Vera 分析 | Vera Analysis</div>', unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
-    with col1:
-        metric_card("重复度 | Duplication", duplication, "越高越像已有衣物")
-        metric_card("适配 | Fit Match", fit, "偏好、预算、场景")
-    with col2:
-        metric_card("吃灰风险 | Dust Risk", dust, "越高越可能低频使用")
-        metric_card("缺口 | Gap Match", gap, gap_reason)
-
-    st.markdown(
-        f"""
-        <div class="decision-{decision_type}">
-            <div class="decision-title">{decision}</div>
-            <div class="decision-sub">Buy Score: {buy_score}/100</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-        <div class="soft-card">
-            <b>为什么 | Why</b><br/>
-            这件 <b>{product['color']} {product['category']}</b> 会与衣橱中部分单品对比。
-            当前场景是 <b>{SCENE_LABELS[target_occasion]}</b>。Vera 判断：<b>{gap_reason}</b>。
-            <br/><br/>
-            Vera compares this item with Amy's wardrobe memory, predicts low-use risk,
-            checks style fit, and decides whether it truly fills a wardrobe gap.
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown("##### 最相似已有衣物 | Similar owned items")
-    for item_name, score in similar_items:
         st.markdown(
             f"""
             <div class="soft-card">
-                <b>{item_name}</b><br/>
-                相似度 | Similarity: {score}/100
+                <span class="pill">{product['category']}</span>
+                <span class="pill">{product['color']}</span>
+                <span class="pill">{product['style']}</span>
+                <span class="pill">HK${product['price']}</span>
+                <div style="margin-top:8px;color:#6f5b4d;font-size:13px;">
+                    材质 | Material: {product['material']}<br/>
+                    识别方式 | Recognition: mock multimodal product intake
+                </div>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    st.markdown("##### 即时搭配 | Instant looks")
-    for name, items, scene in outfit_suggestions(product, target_occasion):
+        st.markdown('<div class="section-title">购买目标 | Buying Context</div>', unsafe_allow_html=True)
+        st.selectbox(
+            "场景 | Occasion",
+            list(SCENE_LABELS.keys()),
+            format_func=lambda x: SCENE_LABELS[x],
+            index=0,
+            key="target_occasion",
+        )
+        st.slider("预算 | Budget HK$", 200, 1500, 800, 50, key="budget")
+        st.multiselect(
+            "偏好风格 | Preferred styles",
+            ["minimal", "business casual", "formal", "casual", "commuter", "party", "soft casual"],
+            default=["minimal", "business casual"],
+            key="preferred_styles",
+        )
+        st.multiselect(
+            "偏好颜色 | Preferred colors",
+            ["black", "white", "beige", "blue", "cream", "pink"],
+            default=["black", "white", "beige"],
+            key="preferred_colors",
+        )
+
+        if st.button("Ask Vera · 开始买前分析", type="primary"):
+            st.session_state.buy_step = "analysis"
+            st.rerun()
+
+    else:
+        selected_product_name = st.session_state.get("selected_product_name", list(PRODUCTS.keys())[0])
+        product = PRODUCTS[selected_product_name]
+        target_occasion = st.session_state.get("target_occasion", "presentation")
+        budget = st.session_state.get("budget", 800)
+        preferred_styles = st.session_state.get("preferred_styles", ["minimal", "business casual"])
+        preferred_colors = st.session_state.get("preferred_colors", ["black", "white", "beige"])
+        uploaded_file = st.session_state.get("uploaded_product_image")
+
+        st.markdown('<div class="section-title">Vera 分析 | Vera Analysis</div>', unsafe_allow_html=True)
+        if st.button("← 重新选择商品 | Back to scan"):
+            st.session_state.buy_step = "scan"
+            st.rerun()
+
+        if uploaded_file:
+            st.image(uploaded_file, caption="本次分析商品 | Product being analyzed", use_container_width=True)
+        else:
+            st.image(product["image"], caption=selected_product_name, use_container_width=True)
+
+        duplication, similar_items = duplication_analysis(product)
+        dust = dust_risk(product)
+        fit = fit_style_score(product, preferred_styles, preferred_colors, budget)
+        gap, gap_reason = occasion_gap_score(product, target_occasion)
+        decision, decision_type, buy_score = final_decision(duplication, dust, fit, gap)
+
         st.markdown(
             f"""
             <div class="soft-card">
-                <b>{name}</b><br/>
-                {items}<br/>
-                <span style="color:#7b6658;font-size:12px;">{scene}</span>
+                <b>分析对象 | Item</b><br/>
+                {selected_product_name}<br/>
+                <span class="pill">{SCENE_LABELS[target_occasion]}</span>
+                <span class="pill">Budget HK${budget}</span>
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-    if decision_type == "success":
-        st.link_button("去合作商店购买 | Go to partner store", "https://example-fashion-store.com/product/vera-demo")
-    else:
-        st.button("加入 Wishlist，7 天后提醒 | Wishlist & remind me", type="secondary")
+        col1, col2 = st.columns(2)
+        with col1:
+            metric_card("重复度 | Duplication", duplication, "越高越像已有衣物")
+            metric_card("适配 | Fit Match", fit, "偏好、预算、场景")
+        with col2:
+            metric_card("吃灰风险 | Dust Risk", dust, "越高越可能低频使用")
+            metric_card("缺口 | Gap Match", gap, gap_reason)
+
+        st.markdown(
+            f"""
+            <div class="decision-{decision_type}">
+                <div class="decision-title">{decision}</div>
+                <div class="decision-sub">Buy Score: {buy_score}/100</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown(
+            f"""
+            <div class="soft-card">
+                <b>为什么 | Why</b><br/>
+                这件 <b>{product['color']} {product['category']}</b> 会与衣橱中部分单品对比。
+                当前场景是 <b>{SCENE_LABELS[target_occasion]}</b>。Vera 判断：<b>{gap_reason}</b>。
+                <br/><br/>
+                Vera compares this item with Amy's wardrobe memory, predicts low-use risk,
+                checks style fit, and decides whether it truly fills a wardrobe gap.
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        st.markdown("##### 最相似已有衣物 | Similar owned items")
+        for item_name, score in similar_items:
+            st.markdown(
+                f"""
+                <div class="soft-card">
+                    <b>{item_name}</b><br/>
+                    相似度 | Similarity: {score}/100
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        st.markdown("##### 即时搭配 | Instant looks")
+        for name, items, scene in outfit_suggestions(product, target_occasion):
+            st.markdown(
+                f"""
+                <div class="soft-card">
+                    <b>{name}</b><br/>
+                    {items}<br/>
+                    <span style="color:#7b6658;font-size:12px;">{scene}</span>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+        if decision_type == "success":
+            st.link_button("去合作商店购买 | Go to partner store", "https://example-fashion-store.com/product/vera-demo")
+        else:
+            st.button("加入 Wishlist，7 天后提醒 | Wishlist & remind me", type="secondary")
 
 with tab_closet:
     st.markdown('<div class="section-title">Amy 的数字衣橱 | Amy’s Digital Closet</div>', unsafe_allow_html=True)
