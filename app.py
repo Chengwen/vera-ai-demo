@@ -139,40 +139,68 @@ st.markdown(
     .bottom-nav {
         display: flex;
         justify-content: space-around;
-        background: linear-gradient(135deg, #ff7eb6 0%, #ff4f9a 48%, #e83f87 100%);
+        background: linear-gradient(135deg, #ffdce9 0%, #f7a8c8 52%, #ef8bb7 100%);
         border-radius: 22px;
-        color: white;
+        color: #5f2643;
         padding: 11px 7px;
         margin-top: 18px;
         font-size: 12px;
         font-weight: 700;
     }
-    .bottom-nav, .bottom-nav span { color: white !important; }
+    .bottom-nav, .bottom-nav span { color: #5f2643 !important; }
     .stTabs [data-baseweb="tab-list"] {
         gap: 6px;
-        background: #ffe1ee;
+        background: #fff1f7;
         padding: 5px;
         border-radius: 999px;
-        border: 1px solid rgba(232, 63, 135, 0.16);
+        border: 1px solid rgba(247, 168, 200, 0.40);
     }
     .stTabs [data-baseweb="tab"] {
         border-radius: 999px;
         padding: 8px 10px;
         font-size: 13px;
-        color: #b12f6f !important;
+        color: #9f4771 !important;
         font-weight: 800;
     }
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(135deg, #ff7eb6 0%, #ff4f9a 48%, #e83f87 100%) !important;
-        color: white !important;
-        box-shadow: 0 8px 18px rgba(232, 63, 135, 0.22);
+        background: linear-gradient(135deg, #ffdce9 0%, #f7a8c8 52%, #ef8bb7 100%) !important;
+        color: #5f2643 !important;
+        box-shadow: 0 8px 18px rgba(247, 168, 200, 0.32);
     }
     .stTabs [aria-selected="true"] p,
-    .stTabs [aria-selected="true"] span { color: white !important; }
+    .stTabs [aria-selected="true"] span { color: #5f2643 !important; }
     div[data-baseweb="select"] > div,
     div[data-baseweb="select"] span,
     div[data-baseweb="popover"] {
         color: #2b211c !important;
+    }
+    div[data-baseweb="select"] > div {
+        background: #fff7fb !important;
+        border: 1.5px solid rgba(247, 168, 200, 0.62) !important;
+        border-radius: 18px !important;
+        box-shadow: 0 6px 16px rgba(247, 168, 200, 0.16);
+    }
+    div[data-baseweb="select"] svg {
+        color: #d978a8 !important;
+        fill: #d978a8 !important;
+    }
+    div[data-baseweb="popover"] ul,
+    div[data-baseweb="menu"] {
+        background: #fffaf6 !important;
+        border: 1px solid rgba(247, 168, 200, 0.36) !important;
+        border-radius: 16px !important;
+    }
+    div[role="option"] {
+        color: #2b211c !important;
+        background: #fffaf6 !important;
+    }
+    div[role="option"]:hover {
+        background: #fff1f7 !important;
+        color: #9f4771 !important;
+    }
+    div[aria-selected="true"][role="option"] {
+        background: #f7a8c8 !important;
+        color: #5f2643 !important;
     }
     input, textarea, .stTextInput input, .stNumberInput input {
         color: #2b211c !important;
@@ -190,30 +218,30 @@ st.markdown(
     div[data-testid="stButton"] > button[kind="primary"] {
         width: 78%;
         min-height: 52px;
-        background: linear-gradient(135deg, #ff7eb6 0%, #ff4f9a 48%, #e83f87 100%) !important;
-        color: white !important;
+        background: linear-gradient(135deg, #ffdce9 0%, #f7a8c8 52%, #ef8bb7 100%) !important;
+        color: #5f2643 !important;
         border: none !important;
-        box-shadow: 0 12px 28px rgba(232, 63, 135, 0.32);
+        box-shadow: 0 12px 28px rgba(247, 168, 200, 0.36);
         font-size: 16px;
         letter-spacing: 0.2px;
     }
     div[data-testid="stButton"] > button[kind="primary"]:hover {
-        background: linear-gradient(135deg, #ff8ec0 0%, #ff5fa4 48%, #ef4b92 100%) !important;
-        color: white !important;
+        background: linear-gradient(135deg, #ffe5ef 0%, #f9b7d1 52%, #f09ac0 100%) !important;
+        color: #5f2643 !important;
         border: none !important;
         transform: translateY(-1px);
     }
     div[data-testid="stButton"] > button[kind="secondary"],
     .stLinkButton > a {
-        background: linear-gradient(135deg, #ff7eb6 0%, #ff4f9a 48%, #e83f87 100%) !important;
-        color: white !important;
+        background: linear-gradient(135deg, #ffdce9 0%, #f7a8c8 52%, #ef8bb7 100%) !important;
+        color: #5f2643 !important;
         border: none !important;
-        box-shadow: 0 10px 24px rgba(232, 63, 135, 0.24);
+        box-shadow: 0 10px 24px rgba(247, 168, 200, 0.32);
     }
     div[data-testid="stButton"] > button[kind="secondary"]:hover,
     .stLinkButton > a:hover {
-        background: linear-gradient(135deg, #ff8ec0 0%, #ff5fa4 48%, #ef4b92 100%) !important;
-        color: white !important;
+        background: linear-gradient(135deg, #ffe5ef 0%, #f9b7d1 52%, #f09ac0 100%) !important;
+        color: #5f2643 !important;
         border: none !important;
     }
     </style>
